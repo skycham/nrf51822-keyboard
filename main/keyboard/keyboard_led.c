@@ -13,7 +13,7 @@
 #include "nrf_delay.h"
 #include "nrf_gpio.h"
 
-uint16_t led_state = 0x0000;
+uint16_t led_state = 0x0001;
 
 /**
  * @brief 底层设置LED状态

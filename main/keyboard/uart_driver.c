@@ -86,11 +86,11 @@ void uart_mode_change_invoke()
             led_set_bit(LED_BIT_USB, 0);
             break;
         case UART_MODE_USB:
-            // led_set_bit(LED_BIT_BLE, 0);
+            led_set_bit(LED_BIT_BLE, 0);
             led_set_bit(LED_BIT_USB, 1);
             break;
         case UART_MODE_BLE_OVERRIDE:
-            // led_set_bit(LED_BIT_BLE, 1);
+            led_set_bit(LED_BIT_BLE, 1);
             led_set_bit(LED_BIT_USB, 0);
             break;
         default:

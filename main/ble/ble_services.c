@@ -28,6 +28,7 @@
 
 #include "../tmk/tmk_core/common/bootloader.h"
 #include "bootloader_util.h"
+#include "keyboard_led.h"
 
 #ifdef BLE_DFU_APP_SUPPORT
 #include "ble_dfu.h"
@@ -335,9 +336,9 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
         if (uart_is_using_usb())
             ble_advertising_start(BLE_ADV_MODE_SLOW);
         else
-#endif
-            sleep_mode_enter(true);
-
+    #endif
+        //sleep_mode_enter(true);
+        ble_idle_sleep_counter_set(BLE_IDLE_TIMEOUT);
         break;
 
     case BLE_ADV_EVT_WHITELIST_REQUEST: {
@@ -372,6 +373,7 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
         break;
     }
     default:
+			  ble_idle_sleep_counter_set(SLEEP_OFF_TIMEOUT);
         break;
     }
 }
@@ -388,6 +390,7 @@ static void on_ble_evt(ble_evt_t* p_ble_evt)
     switch (p_ble_evt->header.evt_id) {
     case BLE_GAP_EVT_CONNECTED:
         m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+		    led_set_bit(LED_BIT_BLE,1);
         break;
 
     case BLE_EVT_TX_COMPLETE:
@@ -395,7 +398,7 @@ static void on_ble_evt(ble_evt_t* p_ble_evt)
 
     case BLE_GAP_EVT_DISCONNECTED:
         m_conn_handle = BLE_CONN_HANDLE_INVALID;
-
+		    led_set_bit(LED_BIT_BLE,0);
         // Reset m_caps_on variable. Upon reconnect, the HID host will re-send the Output
         // report containing the Caps lock state.
         break;

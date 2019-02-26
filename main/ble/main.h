@@ -11,5 +11,6 @@
 
 void service_error_handler(uint32_t nrf_error);
 void sleep_mode_enter(bool notice);
+void ble_idle_sleep_counter_set(uint32_t timer);
 
 #endif
