@@ -320,6 +320,9 @@ void uart_task(void* p_context)
             uart_state_change_invoke();
         }
     }
+		if (uart_is_using_usb()){
+			led_set_bit(LED_BIT_BLE, 0);
+		}
 }
 
 /**

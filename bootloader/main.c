@@ -97,7 +97,9 @@ static void timers_init(void)
 static void buttons_init(void)
 {
     nrf_gpio_cfg_input(BOOTLOADER_BUTTON,
-                             NRF_GPIO_PIN_PULLDOWN);
+                             NRF_GPIO_PIN_PULLUP);
+	   // nrf_gpio_cfg_input(BOOTLOADER_BUTTON_VDD,
+     //                        NRF_GPIO_PIN_PULLDOWN);
     // nrf_gpio_cfg_output(BOOTLOADER_BTN_OPT);                        
     // nrf_gpio_pin_set(BOOTLOADER_BTN_OPT);
 }
@@ -213,8 +215,8 @@ int main(void)
     }
 
     dfu_start  = app_reset;
-    dfu_start |= (nrf_gpio_pin_read(BOOTLOADER_BUTTON) == 1);
-    
+    dfu_start |= (nrf_gpio_pin_read(BOOTLOADER_BUTTON) == 0 ? true : false); //如果BL BUTTON输入低电平(短接)，则启动DFU（dfu_start）
+
     if (dfu_start || (!bootloader_app_is_valid(DFU_BANK_0_REGION_START)))
     {
         LED_SET(UPDATE_IN_PROGRESS_LED);

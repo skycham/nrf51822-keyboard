@@ -480,18 +480,14 @@ void uart_state_change(bool state)
     {    //USB线未接入
         err_code = app_timer_stop(m_keyboard_sleep_timer_id);
         APP_ERROR_CHECK(err_code);
-			  #ifdef POWER_SAVE_MODE
         led_powersave_mode(false);
-			  #endif
         keyboard_switch_scan_mode(false);
     }
     else
     {    //USB线接入
         err_code = app_timer_start(m_keyboard_sleep_timer_id, KEYBOARD_FREE_INTERVAL, NULL);
         APP_ERROR_CHECK(err_code);
-			  #ifdef POWER_SAVE_MODE
         led_powersave_mode(true);
-			  #endif
     }
 }
 #endif

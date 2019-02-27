@@ -17,15 +17,13 @@ static bool uart_check_flag, uart_arrive_flag;
 static void uart_tx(uint8_t c)
 {
     SBUF1 = c;
-    while (U1TI == 0)
-        ;
+    while (U1TI == 0);
     U1TI = 0;
 }
 
 static uint8_t uart_rx()
 {
-    while (U1RI == 0)
-        ;
+    while (U1RI == 0);
     U1RI = 0;
     return SBUF1;
 }
@@ -53,7 +51,7 @@ void uart_init()
     U1SM0 = 0;  // 8Bit
     U1SMOD = 1; // fast mode
     U1REN = 1;  //串口0接收使能
-    SBAUD1 = 256 - FREQ_SYS / 16 / 57600;
+    SBAUD1 = 0 - FREQ_SYS / 16 / 57600;
     IE_UART1 = 1; //启用串口中断
 }
 

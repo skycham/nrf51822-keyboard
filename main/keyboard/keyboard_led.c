@@ -13,7 +13,7 @@
 #include "nrf_delay.h"
 #include "nrf_gpio.h"
 
-uint16_t led_state = 0x0001;
+uint16_t led_state = 0x0000;
 
 /**
  * @brief 底层设置LED状态
@@ -76,7 +76,7 @@ void led_set_bit(enum led_bit_usage bit, bool state)
  */
 void led_set_mask(uint16_t mask, uint16_t val)
 {
-    uint16_t state = (led_state | mask) + (val & mask);
+    uint16_t state = (led_state & ~mask) + (val & mask);
     led_change_handler(state);
 }
 

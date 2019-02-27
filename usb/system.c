@@ -20,8 +20,9 @@ void CfgSysClock()
 }
 
 /** \brief 初始化UART
- *
+ *  此函数并未使用
  */
+/*
 void InitUART()
 {
     uint32_t x;
@@ -36,13 +37,6 @@ void InitUART()
 
     PCON |= SMOD; //SMOD = 0; uart slow mode
 
-    /*
-    x = 8 * FREQ_SYS / UART0_BUAD / 16;                                       //如果更改主频，注意x的值不要溢出
-    x2 = x % 8;
-    x /= 10;
-    if ( x2 >= 4 ) x ++;                                                       //四舍五入
-    */
-
     x = FREQ_SYS / UART0_BUAD / 16;
 
     TMOD = TMOD & ~bT1_GATE & ~bT1_CT & ~MASK_T1_MOD | bT1_M1; //0X20，Timer1作为8位自动重载定时器
@@ -52,24 +46,39 @@ void InitUART()
     TI = 1;
     REN = 1; //串口0接收使能
 }
+*/
 
-/** \brief 延时x毫秒
- *
- * \param 毫秒数
- * \return
- *
- */
-void DelayMs(uint16_t n) // 以mS为单位延时
+
+/*******************************************************************************
+* Function Name  : Delayus(uint16_t n)
+* Description    : us延时函数
+* Input          : uint16_t n
+* Output         : None
+* Return         : None
+*******************************************************************************/
+void DelayUs(uint16_t n)  // 以uS为单位延时
 {
-    // md为何会用这么dirty的方法做延时啊
-    while (n--)
-    {
-        while ((TKEY_CTRL & bTKC_IF) == 0)
-            ;
-        while (TKEY_CTRL & bTKC_IF)
-            ;
-    }
+	while (n) {  // total = 12~13 Fsys cycles, 1uS @Fsys=12MHz
+		++ SAFE_MOD;  // 2 Fsys cycles, for higher Fsys, add operation here
+		-- n;
+	}
 }
+
+/*******************************************************************************
+* Function Name  : Delayms(uint16_t n)
+* Description    : ms延时函数
+* Input          : uint16_t n
+* Output         : None
+* Return         : None
+*******************************************************************************/
+void DelayMs(uint16_t n)                                                  // 以mS为单位延时
+{
+	while ( n ) {
+		DelayUs(1000);
+        -- n;
+	}
+}
+
 
 void PrintHex(uint8_t *data, uint8_t len)
 {

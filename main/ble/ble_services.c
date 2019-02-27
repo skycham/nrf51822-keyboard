@@ -394,6 +394,7 @@ static void on_ble_evt(ble_evt_t* p_ble_evt)
         break;
 
     case BLE_EVT_TX_COMPLETE:
+			  led_set_bit(LED_BIT_BLE,1);
         break;
 
     case BLE_GAP_EVT_DISCONNECTED:
