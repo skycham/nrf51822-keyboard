@@ -337,9 +337,8 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
             ble_advertising_start(BLE_ADV_MODE_SLOW);
         else
     #endif
-        //sleep_mode_enter(true);
-				//ble_advertising_start(BLE_ADV_MODE_FAST);
-        ble_idle_sleep_counter_set(BLE_IDLE_TIMEOUT);
+        sleep_mode_enter(true);
+        //ble_idle_sleep_counter_set(BLE_IDLE_TIMEOUT);
         break;
 
     case BLE_ADV_EVT_WHITELIST_REQUEST: {

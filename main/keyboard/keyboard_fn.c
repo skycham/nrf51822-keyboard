@@ -16,6 +16,7 @@ void action_function(keyrecord_t* record, uint8_t id, uint8_t opt)
     if (record->event.pressed) {
         switch (id) {
         case POWER_SLEEP:
+            eeconfig_toggle_power();
             sleep_mode_enter(true);
             break;
         case SWITCH_DEVICE:

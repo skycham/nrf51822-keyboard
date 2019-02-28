@@ -74,7 +74,7 @@ static uint8_t passkey_entered[6];
 static uint16_t sleep_timer_counter = 0;
 static uint16_t ble_idle_timer_counter = 0;
 static nrf_drv_wdt_channel_id m_channel_id;
-
+custom_config_t power_config;
 /**@brief Callback function for asserts in the SoftDevice.
  *
  * @details This function will be called in case of an assert in the SoftDevice.
@@ -301,10 +301,13 @@ void hook_send_keyboard(report_keyboard_t* report)
 void hook_bootmagic()
 {
     bool erase_bond = false;
+	  power_config.raw = eeconfig_read_custom();
     if (!bootmagic_scan_key(BOOTMAGIC_KEY_BOOT)) {
 // Yes, 如果没有按下Space+U，那就不开机。
 #ifdef UART_SUPPORT
-        if (uart_current_mode == UART_MODE_IDLE) // 插入了USB，则直接开机
+        if (uart_current_mode == UART_MODE_IDLE || power_config.power) // 插入了USB，则直接开机
+#else
+			  if (power_config.power)
 #endif
         {
 #ifndef KEYBOARD_DEBUG

@@ -14,6 +14,7 @@ bool realIsInit = false;
 
 pstorage_handle_t pstorage_base_block_id;
 pstorage_handle_t block_handle;
+custom_config_t custom_config;
 
 void config_pstorage_init(void);
 void config_write(void);
@@ -26,12 +27,13 @@ static void eeconfig_set_default()
 {
     config_buffer[0] = EECONFIG_MAGIC_NUMBER >> 8;
     config_buffer[1] = EECONFIG_MAGIC_NUMBER % 0x100;
-    config_buffer[2] = 0;
-    config_buffer[3] = 0;
-    config_buffer[4] = 0;
-    config_buffer[5] = 0;
+    config_buffer[2] = 0;   //EECONFIG_DEBUG
+    config_buffer[3] = 0;   //EECONFIG_DEFAULT_LAYER
+    config_buffer[4] = 0;   //EECONFIG_KEYMAP
+    config_buffer[5] = 0;   //EECONFIG_MOUSEKEY_ACCEL
+    config_buffer[6] = 0;   //EECONFIG_CUSTOM
 #ifdef BACKLIGHT_ENABLE
-    config_buffer[6] = 0;
+    config_buffer[7] = 0;
 #endif
 }
 
@@ -90,15 +92,36 @@ void eeconfig_write_keymap(uint8_t val)
     config_buffer[4] = val;
     config_update();
 }
-
-#ifdef BACKLIGHT_ENABLE
-uint8_t eeconfig_read_backlight(void)
+//add by geno
+uint8_t eeconfig_read_custom(void)
 {
     return config_buffer[6];
 }
-void eeconfig_write_backlight(uint8_t val)
+void eeconfig_write_custom(uint8_t val)
 {
     config_buffer[6] = val;
+    config_update();
+}
+void eeconfig_toggle_power(void)
+{
+    custom_config.raw = eeconfig_read_custom();
+	  if(custom_config.power == 1) {
+		custom_config.power = 0;
+    eeconfig_write_custom(custom_config.raw);
+		}	else {
+	  custom_config.power = 1;
+    eeconfig_write_custom(custom_config.raw);
+		}
+}
+//----add by geno
+#ifdef BACKLIGHT_ENABLE
+uint8_t eeconfig_read_backlight(void)
+{
+    return config_buffer[7];
+}
+void eeconfig_write_backlight(uint8_t val)
+{
+    config_buffer[7] = val;
     config_update();
 }
 #endif
