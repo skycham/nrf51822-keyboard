@@ -248,11 +248,11 @@ static void keyboard_sleep_counter_reset(void)
 void ble_idle_sleep_counter_set(uint32_t timer)
 {
 	  //uint32_t err_code;
-	  if(uart_current_mode == UART_MODE_IDLE) {
-      ble_idle_timer_counter = SLEEP_OFF_TIMEOUT - timer;
+	  //if(uart_current_mode == UART_MODE_IDLE) {
+      sleep_timer_counter = SLEEP_OFF_TIMEOUT - timer;
 	    //err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
       //APP_ERROR_CHECK(err_code);
-	  }
+	  //}
 }
 
 /**@brief Function for handling the keyboard scan timer timeout.

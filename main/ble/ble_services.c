@@ -332,12 +332,13 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
 
     switch (ble_adv_evt) {
     case BLE_ADV_EVT_IDLE:
-#ifdef UART_SUPPORT
+    #ifdef UART_SUPPORT
         if (uart_is_using_usb())
             ble_advertising_start(BLE_ADV_MODE_SLOW);
         else
     #endif
         //sleep_mode_enter(true);
+				//ble_advertising_start(BLE_ADV_MODE_FAST);
         ble_idle_sleep_counter_set(BLE_IDLE_TIMEOUT);
         break;
 
@@ -373,7 +374,7 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
         break;
     }
     default:
-			  ble_idle_sleep_counter_set(SLEEP_OFF_TIMEOUT);
+			  //ble_idle_sleep_counter_set(SLEEP_OFF_TIMEOUT);
         break;
     }
 }
